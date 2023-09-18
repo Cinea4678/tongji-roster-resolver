@@ -5,6 +5,7 @@ import (
 	"github.com/xuri/excelize/v2"
 	"log"
 	"strconv"
+	"strings"
 )
 
 const sheet = "Sheet1"
@@ -34,6 +35,9 @@ func resolveCourseData(file *excelize.File) Course {
 
 	class, _ := file.GetCellValue(sheet, "E2")
 	class = string([]rune(class)[4:])
+	if strings.HasSuffix(class, "班") {
+		class = string([]rune(class)[:len(class)-1])
+	}
 
 	courseCode, _ := file.GetCellValue(sheet, "U2")
 	courseCode = string([]rune(courseCode)[5:])
@@ -51,7 +55,7 @@ func resolveCourseData(file *excelize.File) Course {
 	studentNumStr = string([]rune(studentNumStr)[5:])
 	studentNum, _ := strconv.Atoi(studentNumStr)
 
-	time, _ := file.GetCellValue(sheet, "U3")
+	time, _ := file.GetCellValue(sheet, "U4")
 	time = string([]rune(time)[5:])
 
 	return Course{
